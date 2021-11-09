@@ -36,3 +36,4 @@ Establish your own additional team policies around the following aspects:
 
 * Julia Pan
 * Andy Chen
+* Jett Serie
