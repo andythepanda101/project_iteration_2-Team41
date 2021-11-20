@@ -9,6 +9,7 @@ import java.util.List;
 public class VisualTransitSimulator {
 
   private static boolean LOGGING = false;
+  private BusFactory busFact;
   private int numTimeSteps = 0;
   private int simulationTimeElapsed = 0;
   private Counter counter;
