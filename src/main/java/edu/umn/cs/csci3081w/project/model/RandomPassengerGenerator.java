@@ -8,7 +8,7 @@ public class RandomPassengerGenerator extends PassengerGenerator {
   //variables to make testing deterministic
   public static boolean DETERMINISTIC = false;
   //deterministic probability value for testing
-  public static final double DETERMINISTIC_VALUE = 0.1;
+  public static final double DETERMINISTIC_VALUE = 0.0;
 
   public RandomPassengerGenerator(List<Stop> stops, List<Double> probabilities) {
     super(stops, probabilities);

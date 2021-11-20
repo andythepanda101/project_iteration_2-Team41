@@ -43,7 +43,7 @@ public class RandomPassengerGeneratorTest {
   /**
    * Tests that RandomPassengerGenerator's generate() method is working
    * correctly generating random passengers, to test needs for DETERMINISTIC = true,
-   * and we set DETERMINISTIC_VALUE = 1.0 for our testing purposes to
+   * and we set DETERMINISTIC_VALUE = 0.0 for our testing purposes to
    * guarantee passenger generation at a stop
    */
   @Test
