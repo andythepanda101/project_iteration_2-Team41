@@ -1,6 +1,7 @@
 package edu.umn.cs.csci3081w.project.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,10 +15,10 @@ public class PositionTest {
   Position testPosition2;
 
   /**
-   * Setup values for creating Positions in testing
+   * Setup values for creating Positions in testing.
    */
   @BeforeEach
-  public void setup(){
+  public void setup() {
     testLongitude1 = 11.111111;
     testLatitude1 = 22.222222;
     testLongitude2 = 33.333333;
@@ -25,10 +26,10 @@ public class PositionTest {
   }
 
   /**
-   * Testing state after using constructor
+   * Testing state after using constructor.
    */
   @Test
-  public void testConstructorNormal(){
+  public void testConstructorNormal() {
     testPosition1 = new Position(testLongitude1, testLatitude1);
     testPosition2 = new Position(testLongitude2, testLatitude2);
     assertEquals(testLongitude1, testPosition1.getLongitude());

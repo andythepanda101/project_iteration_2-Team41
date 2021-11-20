@@ -3,14 +3,13 @@ package edu.umn.cs.csci3081w.project.model;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class PassengerFactoryTest {
 
@@ -18,12 +17,15 @@ public class PassengerFactoryTest {
   Passenger testPassenger;
 
   /**
-   * Setup creates a test PassengerFactory to test its methods
+   * Setup creates a test PassengerFactory to test its methods.
    */
   @BeforeEach
-  public void setup(){
+  public void setup() {
     testPassengerFactory = new PassengerFactory();
     testPassenger = new Passenger(13, "Goldy");
+    testPassengerFactory.DETERMINISTIC = true;
+    testPassengerFactory.DETERMINISTIC_NAMES_COUNT = 0;
+    testPassengerFactory.DETERMINISTIC_DESTINATION_COUNT = 0;
   }
 
   /**
@@ -33,7 +35,7 @@ public class PassengerFactoryTest {
    * run these test cases.
    */
   @Test
-  public void testNameGeneration(){
+  public void testNameGeneration() {
     assertEquals("Goldy", testPassengerFactory.nameGeneration());
     assertEquals("President", testPassengerFactory.nameGeneration());
     assertEquals("Coach", testPassengerFactory.nameGeneration());
@@ -49,9 +51,9 @@ public class PassengerFactoryTest {
    * run these test cases.
    */
   @Test
-  public void testGenerate(){
+  public void testGenerate() {
     // generate first test passenger
-    Passenger generatedPassenger1 = testPassengerFactory.generate(11,9);
+    Passenger generatedPassenger1 = testPassengerFactory.generate(11, 9);
     generatedPassenger1.pasUpdate();
     generatedPassenger1.pasUpdate();
 
@@ -77,7 +79,7 @@ public class PassengerFactoryTest {
     }
 
     // generate second test passenger
-    Passenger generatedPassenger2 = testPassengerFactory.generate(14,18);
+    Passenger generatedPassenger2 = testPassengerFactory.generate(14, 18);
     generatedPassenger2.pasUpdate();
     generatedPassenger2.pasUpdate();
     generatedPassenger2.pasUpdate();

@@ -1,7 +1,7 @@
 package edu.umn.cs.csci3081w.project.model;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -10,9 +10,8 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class LineTest {
 
@@ -104,14 +103,14 @@ public class LineTest {
   @Test
   public void testConstructor() {
     assertEquals(2468, testLine.getId());
-    assertEquals("testLine",testLine.getName());
-    assertEquals("testType",testLine.getType());
-    assertEquals(testRouteOut,testLine.getOutboundRoute());
-    assertEquals(testRouteIn,testLine.getInboundRoute());
+    assertEquals("testLine", testLine.getName());
+    assertEquals("testType", testLine.getType());
+    assertEquals(testRouteOut, testLine.getOutboundRoute());
+    assertEquals(testRouteIn, testLine.getInboundRoute());
   }
 
   /**
-   * Testing report feature of a Line that prints details
+   * Testing report feature of a Line that prints details.
    */
   @Test
   public void testReport() {
