@@ -62,7 +62,7 @@ public class StopTest {
     Route testRouteIn = new Route(11, "testRouteIn",
         stopsIn, distancesIn, generatorIn);
     Line line = new Line(10000, "testLine", "BUS", testRouteOut, testRouteIn);
-    return new Bus(0, line, 5, 1);
+    return new SmallBus(0, line, 1);
   }
 
   /**
@@ -142,12 +142,16 @@ public class StopTest {
     testBus.loadPassenger(passenger3);
     testBus.loadPassenger(passenger4);
     testBus.loadPassenger(passenger5);
+    for (int i = 0; i < (testBus.getCapacity() - 5); i++) {
+      Passenger newPassenger = new Passenger(1, String.format("OtherPassenger %d", i));
+      testBus.loadPassenger(newPassenger);
+    }
     Passenger passenger6 = new Passenger(1, "I never leave the stop");
     testBus.getNextStop().addPassengers(passenger6);
     int passengersLoaded = testBus.getNextStop().loadPassengers(testBus);
     assertEquals(0, passengersLoaded);
     long passengersOnBus = testBus.getPassengers().size();
-    assertEquals(5, passengersOnBus);
+    assertEquals(20, passengersOnBus);
   }
 
   /**

@@ -1,13 +1,8 @@
 package edu.umn.cs.csci3081w.project.webserver;
 
 import com.google.gson.JsonObject;
-import edu.umn.cs.csci3081w.project.model.Bus;
-import edu.umn.cs.csci3081w.project.model.Counter;
-import edu.umn.cs.csci3081w.project.model.Line;
-import edu.umn.cs.csci3081w.project.model.Route;
-import edu.umn.cs.csci3081w.project.model.StorageFacility;
-import edu.umn.cs.csci3081w.project.model.Train;
-import edu.umn.cs.csci3081w.project.model.Vehicle;
+import edu.umn.cs.csci3081w.project.model.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -90,8 +85,8 @@ public class VisualTransitSimulator {
         if (line.getType().equals(Line.BUS_LINE)) {
           if (storageFacility.getBusesNum() > 0) {
             activeVehicles
-                .add(new Bus(counter.getBusIdCounterAndIncrement(), line.shallowCopy(),
-                    Bus.CAPACITY, Bus.SPEED));
+                .add(new SmallBus(counter.getBusIdCounterAndIncrement(), line.shallowCopy(),
+                    SmallBus.SPEED));
             this.storageFacility.decrementBusesNum();
           }
           timeSinceLastVehicle.set(i, vehicleStartTimings.get(i));
@@ -99,7 +94,7 @@ public class VisualTransitSimulator {
         } else if (line.getType().equals(Line.TRAIN_LINE)) {
           if (storageFacility.getTrainsNum() > 0) {
             activeVehicles
-                .add(new Train(counter.getTrainIdCounterAndIncrement(), line.shallowCopy(),
+                .add(new DieselTrain(counter.getTrainIdCounterAndIncrement(), line.shallowCopy(),
                     Train.CAPACITY, Train.SPEED));
             this.storageFacility.decrementTrainsNum();
           }
