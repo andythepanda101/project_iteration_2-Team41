@@ -3,13 +3,14 @@ package edu.umn.cs.csci3081w.project.webserver;
 import com.google.gson.JsonObject;
 import edu.umn.cs.csci3081w.project.model.*;
 
+import java.time.chrono.ChronoLocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalDateTime;
 
 public class VisualTransitSimulator {
 
   private static boolean LOGGING = false;
-  private BusFactory busFact;
   private int numTimeSteps = 0;
   private int simulationTimeElapsed = 0;
   private Counter counter;
@@ -21,6 +22,10 @@ public class VisualTransitSimulator {
   private List<Integer> timeSinceLastVehicle;
   private StorageFacility storageFacility;
   private WebServerSession webServerSession;
+  private BusFactory busFact = new BusFactory();
+  private LocalDateTime time = LocalDateTime.now();
+  private DayBusStrategy dayBus = new DayBusStrategy();
+  private NightBusStrategy nightBus = new NightBusStrategy();
 
   /**
    * Constructor for Simulation.
@@ -41,7 +46,7 @@ public class VisualTransitSimulator {
     this.timeSinceLastVehicle = new ArrayList<Integer>();
     this.storageFacility = configManager.getStorageFacility();
     if (this.storageFacility == null) {
-      this.storageFacility = new StorageFacility(Integer.MAX_VALUE, Integer.MAX_VALUE);
+      this.storageFacility = new StorageFacility(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
     }
 
     if (VisualTransitSimulator.LOGGING) {
@@ -84,11 +89,24 @@ public class VisualTransitSimulator {
         Route inbound = routes.get(2 * i + 1);
         Line line = findLineBasedOnRoute(outbound);
         if (line.getType().equals(Line.BUS_LINE)) {
-          if (storageFacility.getBusesNum() > 0) {
-            activeVehicles
-                .add(new SmallBus(counter.getBusIdCounterAndIncrement(), line.shallowCopy(),
-                    SmallBus.SPEED));
-            this.storageFacility.decrementBusesNum();
+          // Setting Bus Strategy
+          if ( !(busFact.getStrategy() instanceof DayBusStrategy) && (time.getHour() >= 8) && (time.getHour() < 16) ) {
+            busFact.setBusStrategy(dayBus);
+            nightBus.resetCount();
+          } else if ( !(busFact.getStrategy() instanceof NightBusStrategy) && ((time.getHour() < 8) || (time.getHour() >= 16)) ) {
+            busFact.setBusStrategy(nightBus);
+            dayBus.resetCount();
+          }
+          Bus newBus = busFact.createVehicle(counter.getBusIdCounterAndIncrement(), line.shallowCopy(), SmallBus.SPEED);
+          if (newBus instanceof SmallBus && this.storageFacility.getSmallBusesNum() > 0) {
+            activeVehicles.add(newBus);
+            this.storageFacility.decrementSmallBusesNum();
+          } else if (newBus instanceof LargeBus && this.storageFacility.getLargeBusesNum() > 0) {
+            activeVehicles.add(newBus);
+            this.storageFacility.decrementLargeBusesNum();
+          } else {
+            counter.busIdCounter--;
+            busFact.getStrategy().decrementCount();
           }
           timeSinceLastVehicle.set(i, vehicleStartTimings.get(i));
           timeSinceLastVehicle.set(i, timeSinceLastVehicle.get(i) - 1);
@@ -113,8 +131,10 @@ public class VisualTransitSimulator {
       if (currVehicle.isTripComplete()) {
         Vehicle completedTripVehicle = activeVehicles.remove(i);
         completedTripVehicles.add(completedTripVehicle);
-        if (completedTripVehicle instanceof Bus) {
-          this.storageFacility.incrementBusesNum();
+        if (completedTripVehicle instanceof SmallBus) {
+          this.storageFacility.incrementSmallBusesNum();
+        } else if (completedTripVehicle instanceof LargeBus) {
+          this.storageFacility.incrementLargeBusesNum();
         } else if (completedTripVehicle instanceof Train) {
           this.storageFacility.incrementTrainsNum();
         }

@@ -3,8 +3,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class NightBusStrategy implements BusStrategy {
-  private static int busCount;
-  private List<String> busSequence = Arrays.asList("small", "small", "small", "large");
+  private static int busCount = 0;
+  private final List<String> busSequence = Arrays.asList("small", "small", "small", "large");
 
   public Bus createBus(int id, Line line, double speed) {
     Bus newBus;
@@ -17,4 +17,8 @@ public class NightBusStrategy implements BusStrategy {
     }
     return newBus;
   }
+
+  public void resetCount() { busCount = 0; }
+
+  public void decrementCount() { busCount--; }
 }

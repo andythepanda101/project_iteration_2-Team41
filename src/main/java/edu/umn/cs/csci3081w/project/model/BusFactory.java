@@ -3,7 +3,7 @@ package edu.umn.cs.csci3081w.project.model;
 public class BusFactory extends VehicleFactory {
   private BusStrategy busType;
 
-  public void setBusType(BusStrategy description) {
+  public void setBusStrategy(BusStrategy description) {
     busType = description;
   }
 
@@ -11,4 +11,6 @@ public class BusFactory extends VehicleFactory {
     Bus newBus = busType.createBus(id, line, speed);
     return newBus;
   }
+
+  public BusStrategy getStrategy() { return busType; }
 }
