@@ -2,10 +2,10 @@ package edu.umn.cs.csci3081w.project.model;
 
 import java.io.PrintStream;
 
-public class Bus extends Vehicle {
+public abstract class Bus extends Vehicle {
   public static final String BUS_VEHICLE = "BUS_VEHICLE";
   public static final double SPEED = 0.5;
-  public static final int CAPACITY = 60;
+  public static int CAPACITY;
   private Line line;
   private double distanceRemaining;
   private Stop nextStop;

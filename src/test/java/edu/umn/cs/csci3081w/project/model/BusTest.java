@@ -55,7 +55,7 @@ public class BusTest {
     testRouteOut = new Route(1, "testRouteOut",
         stopsOut, distancesOut, generatorOut);
 
-    testBus = new Bus(1, new Line(10000, "testLine", "BUS", testRouteOut, testRouteIn), 3, 1.0);
+    testBus = new SmallBus(1, new Line(10000, "testLine", "BUS", testRouteOut, testRouteIn), 1.0);
   }
 
   /**
@@ -65,7 +65,7 @@ public class BusTest {
   public void testConstructor() {
     assertEquals(1, testBus.getId());
     assertEquals("testRouteOut1", testBus.getName());
-    assertEquals(3, testBus.getCapacity());
+    assertEquals(20, testBus.getCapacity());
     assertEquals(1, testBus.getSpeed());
     assertEquals(testRouteOut, testBus.getLine().getOutboundRoute());
     assertEquals(testRouteIn, testBus.getLine().getInboundRoute());
@@ -91,16 +91,12 @@ public class BusTest {
    */
   @Test
   public void testLoadPassenger() {
-
-    Passenger testPassenger1 = new Passenger(3, "testPassenger1");
-    Passenger testPassenger2 = new Passenger(2, "testPassenger2");
-    Passenger testPassenger3 = new Passenger(1, "testPassenger3");
-    Passenger testPassenger4 = new Passenger(1, "testPassenger4");
-
-    assertEquals(1, testBus.loadPassenger(testPassenger1));
-    assertEquals(1, testBus.loadPassenger(testPassenger2));
-    assertEquals(1, testBus.loadPassenger(testPassenger3));
-    assertEquals(0, testBus.loadPassenger(testPassenger4));
+    for (int i = 0; i < (testBus.getCapacity()); i++) {
+      Passenger newPassenger = new Passenger(1, String.format("testPassenger%d", i));
+      assertEquals(1, testBus.loadPassenger(newPassenger));
+    }
+    Passenger lastPassenger = new Passenger(1, "Last Guy");
+    assertEquals(0, testBus.loadPassenger(lastPassenger));
   }
 
 
@@ -179,7 +175,7 @@ public class BusTest {
               + "ID: 1" + System.lineSeparator()
               + "Name: testRouteOut1" + System.lineSeparator()
               + "Speed: 1.0" + System.lineSeparator()
-              + "Capacity: 3" + System.lineSeparator()
+              + "Capacity: 20" + System.lineSeparator()
               + "Position: 44.97358,-93.235071" + System.lineSeparator()
               + "Distance to next stop: 0.843774422231134" + System.lineSeparator()
               + "****Passengers Info Start****" + System.lineSeparator()
@@ -197,10 +193,10 @@ public class BusTest {
    */
   @Test
   public void testCo2() {
-    assertEquals(2, testBus.getCurrentCO2Emission());
+    assertEquals(1, testBus.getCurrentCO2Emission());
     Passenger testPassenger1 = new Passenger(3, "testPassenger1");
     testBus.loadPassenger(testPassenger1);
-    assertEquals(3, testBus.getCurrentCO2Emission());
+    assertEquals(2, testBus.getCurrentCO2Emission());
   }
 
 

@@ -55,7 +55,7 @@ public class TrainTest {
     testRouteOut = new Route(1, "testRouteOut",
         stopsOut, distancesOut, generatorOut);
 
-    testTrain = new Train(1,
+    testTrain = new DieselTrain(1,
         new Line(10000, "testLine", "TRAIN", testRouteOut, testRouteIn),
         3, 1.0);
   }
@@ -199,10 +199,10 @@ public class TrainTest {
    */
   @Test
   public void testCo2() {
-    assertEquals(5, testTrain.getCurrentCO2Emission());
+    assertEquals(6, testTrain.getCurrentCO2Emission());
     Passenger testPassenger1 = new Passenger(3, "testPassenger1");
     testTrain.loadPassenger(testPassenger1);
-    assertEquals(7, testTrain.getCurrentCO2Emission());
+    assertEquals(8, testTrain.getCurrentCO2Emission());
   }
 
 
