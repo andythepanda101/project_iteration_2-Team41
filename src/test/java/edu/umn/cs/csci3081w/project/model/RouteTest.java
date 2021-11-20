@@ -235,8 +235,8 @@ public class RouteTest {
    */
   @Test
   public void testGenerateNewPassengers() {
-    assertEquals(2.0, testRouteOut.generateNewPassengers());
-    assertEquals(1, testRouteOut.getStops().get(0).getPassengers().size());
+    assertEquals(11, testRouteOut.generateNewPassengers());
+    assertEquals(4, testRouteOut.getStops().get(0).getPassengers().size());
   }
 
   /**
@@ -247,8 +247,8 @@ public class RouteTest {
     testRouteIn.update();
 
     // checking if passengers are being generated
-    assertEquals(2, testRouteIn.getStops().get(0).getPassengers().size());
-    assertEquals(1, testRouteIn.getStops().get(1).getPassengers().size());
+    assertEquals(10, testRouteIn.getStops().get(0).getPassengers().size());
+    assertEquals(7, testRouteIn.getStops().get(1).getPassengers().size());
 
     //checking for passenger value updates
     assertEquals(0, testRouteIn.getStops().get(0).getPassengers().get(0).getTimeOnVehicle());

@@ -13,25 +13,24 @@ public class StorageFacilityTest {
 
 
   /**
-   * Setup a test StorageFacility to be used in test cases
+   * Setup a test StorageFacility to be used in test cases.
    */
   @BeforeEach
-  public void setup(){
+  public void setup() {
     testStorageFacility = new StorageFacility(2, 4);
   }
 
   /**
-   * Test the constructor of StorageFacility
+   * Test the constructor of StorageFacility.
    */
   @Test
   public void testConstructor() {
-
     assertEquals(2, testStorageFacility.getBusesNum());
     assertEquals(4, testStorageFacility.getTrainsNum());
   }
 
   /**
-   * Test the incrementor methods of StorageFacility increments correctly
+   * Test the incrementor methods of StorageFacility increments correctly.
    */
   @Test
   public void testIncrement() {
@@ -42,7 +41,7 @@ public class StorageFacilityTest {
   }
 
   /**
-   * Test the decrementor methods of StorageFacility decrements correctly
+   * Test the decrementor methods of StorageFacility decrements correctly.
    */
   @Test
   public void testDecrement() {
