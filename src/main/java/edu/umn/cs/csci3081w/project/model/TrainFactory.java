@@ -12,7 +12,9 @@ public class TrainFactory extends VehicleFactory {
     return newTrain;
   }
 
-  public TrainStrategy getStrategy() { return trainType; }
+  public TrainStrategy getStrategy() {
+    return trainType;
+  }
 }
 
 

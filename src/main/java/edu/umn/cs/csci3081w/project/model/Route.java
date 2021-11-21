@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * A class that represents a Route in the simulation.
+ */
 public class Route {
   private int id;
   private String name;
@@ -98,6 +101,10 @@ public class Route {
     out.println("####Route Info End####");
   }
 
+  /**
+   * Checks if the route is at the end.
+   * @return true if index is greater than the number of stops, false otherwise
+   */
   public boolean isAtEnd() {
     return nextStopIndex >= stops.size();
   }

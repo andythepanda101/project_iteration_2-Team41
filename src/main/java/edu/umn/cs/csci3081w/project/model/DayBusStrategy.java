@@ -1,11 +1,22 @@
 package edu.umn.cs.csci3081w.project.model;
+
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * A strategy class that creates buses for daytime simulation.
+ */
 public class DayBusStrategy implements BusStrategy {
   private static int busCount = 0;
   private final List<String> busSequence = Arrays.asList("large", "large", "small");
 
+  /**
+   * Creates a large or small bus based on the pre-defined sequence.
+   * @param id       bus identifier
+   * @param line     a wrapper class that has routes
+   * @param speed    speed of bus
+   * @return  created bus
+   */
   public Bus createBus(int id, Line line, double speed) {
     Bus newBus;
     if (busSequence.get(busCount % (busSequence.size())).equals("small")) {
@@ -18,7 +29,17 @@ public class DayBusStrategy implements BusStrategy {
     return newBus;
   }
 
-  public void resetCount() { busCount = 0; }
+  /**
+   * Resets the number of buses that were created to 0.
+   */
+  public void resetCount() {
+    busCount = 0;
+  }
 
-  public void decrementCount() { busCount--; }
+  /**
+   * Decrements the number of buses by 1.
+   */
+  public void decrementCount() {
+    busCount--;
+  }
 }
