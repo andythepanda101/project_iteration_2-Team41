@@ -3,18 +3,21 @@ package edu.umn.cs.csci3081w.project.model;
 public class StorageFacility {
   private int smallBusesNum;
   private int largeBusesNum;
-  private int trainsNum;
+  private int electricTrainsNum;
+  private int dieselTrainsNum;
 
   public StorageFacility() {
     smallBusesNum = 0;
     largeBusesNum = 0;
-    trainsNum = 0;
+    electricTrainsNum = 0;
+    dieselTrainsNum = 0;
   }
 
-  public StorageFacility(int smallBusesNum, int largeBusesNum, int trainsNum) {
+  public StorageFacility(int smallBusesNum, int largeBusesNum, int electricTrainsNum, int dieselTrainsNum) {
     this.smallBusesNum = smallBusesNum;
     this.largeBusesNum = largeBusesNum;
-    this.trainsNum = trainsNum;
+    this.electricTrainsNum = electricTrainsNum;
+    this.dieselTrainsNum = dieselTrainsNum;
   }
 
   public int getSmallBusesNum() {
@@ -23,9 +26,11 @@ public class StorageFacility {
 
   public int getLargeBusesNum() { return largeBusesNum; }
 
-  public int getTrainsNum() {
-    return trainsNum;
+  public int getElectricTrainsNum() {
+    return electricTrainsNum;
   }
+
+  public int getDieselTrainsNum() { return dieselTrainsNum; }
 
   public void setSmallBusesNum(int busesNum) {
     this.smallBusesNum = busesNum;
@@ -33,9 +38,11 @@ public class StorageFacility {
 
   public void setLargeBusesNum(int busesNum) { this.largeBusesNum = busesNum; }
 
-  public void setTrainsNum(int trainsNum) {
-    this.trainsNum = trainsNum;
+  public void setElectricTrainsNum(int trainsNum) {
+    this.electricTrainsNum = trainsNum;
   }
+
+  public void setDieselTrainsNum(int trainsNum) { this.dieselTrainsNum = trainsNum; }
 
   public void decrementSmallBusesNum() {
     smallBusesNum--;
@@ -43,9 +50,11 @@ public class StorageFacility {
 
   public void decrementLargeBusesNum() { largeBusesNum--; }
 
-  public void decrementTrainsNum() {
-    trainsNum--;
+  public void decrementElectricTrainsNum() {
+    electricTrainsNum--;
   }
+
+  public void decrementDieselTrainsNum() { dieselTrainsNum--; }
 
   public void incrementSmallBusesNum() {
     smallBusesNum++;
@@ -53,7 +62,9 @@ public class StorageFacility {
 
   public void incrementLargeBusesNum() { largeBusesNum++; }
 
-  public void incrementTrainsNum() {
-    trainsNum++;
+  public void incrementElectricTrainsNum() {
+    electricTrainsNum++;
   }
+
+  public void incrementDieselTrainsNum() { dieselTrainsNum++; }
 }

@@ -17,7 +17,7 @@ public class StorageFacilityTest {
    */
   @BeforeEach
   public void setup() {
-    testStorageFacility = new StorageFacility(2, 4);
+    testStorageFacility = new StorageFacility(2, 4, 3, 5);
   }
 
   /**
@@ -25,8 +25,10 @@ public class StorageFacilityTest {
    */
   @Test
   public void testConstructor() {
-    assertEquals(2, testStorageFacility.getBusesNum());
-    assertEquals(4, testStorageFacility.getTrainsNum());
+    assertEquals(2, testStorageFacility.getSmallBusesNum());
+    assertEquals(4, testStorageFacility.getLargeBusesNum());
+    assertEquals(3, testStorageFacility.getElectricTrainsNum());
+    assertEquals(5, testStorageFacility.getDieselTrainsNum());
   }
 
   /**
@@ -34,10 +36,14 @@ public class StorageFacilityTest {
    */
   @Test
   public void testIncrement() {
-    testStorageFacility.incrementBusesNum();
-    testStorageFacility.incrementTrainsNum();
-    assertEquals(3, testStorageFacility.getBusesNum());
-    assertEquals(5, testStorageFacility.getTrainsNum());
+    testStorageFacility.incrementSmallBusesNum();
+    testStorageFacility.incrementLargeBusesNum();
+    testStorageFacility.incrementElectricTrainsNum();
+    testStorageFacility.incrementDieselTrainsNum();
+    assertEquals(3, testStorageFacility.getSmallBusesNum());
+    assertEquals(5, testStorageFacility.getLargeBusesNum());
+    assertEquals(4, testStorageFacility.getElectricTrainsNum());
+    assertEquals(6, testStorageFacility.getDieselTrainsNum());
   }
 
   /**
@@ -45,10 +51,14 @@ public class StorageFacilityTest {
    */
   @Test
   public void testDecrement() {
-    testStorageFacility.decrementBusesNum();
-    testStorageFacility.decrementTrainsNum();
-    assertEquals(1, testStorageFacility.getBusesNum());
-    assertEquals(3, testStorageFacility.getTrainsNum());
+    testStorageFacility.decrementSmallBusesNum();
+    testStorageFacility.decrementLargeBusesNum();
+    testStorageFacility.decrementElectricTrainsNum();
+    testStorageFacility.decrementDieselTrainsNum();
+    assertEquals(1, testStorageFacility.getSmallBusesNum());
+    assertEquals(3, testStorageFacility.getLargeBusesNum());
+    assertEquals(2, testStorageFacility.getElectricTrainsNum());
+    assertEquals(4, testStorageFacility.getDieselTrainsNum());
   }
 
   /*
