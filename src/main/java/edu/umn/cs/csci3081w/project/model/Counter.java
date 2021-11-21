@@ -1,5 +1,8 @@
 package edu.umn.cs.csci3081w.project.model;
 
+/**
+ * A class that keeps count of the IDs in the simulation.
+ */
 public class Counter {
 
   public int routeIdCounter = 10;
@@ -8,6 +11,9 @@ public class Counter {
   public int trainIdCounter = 2000;
   public int lineIdCounter = 10000;
 
+  /**
+   * Empty constructor for the Counter.
+   */
   public Counter() {
 
   }

@@ -15,6 +15,9 @@ import java.util.Scanner;
 import java.util.Set;
 import org.apache.commons.io.FileUtils;
 
+/**
+ * A class that parses config file to get the information about the simulation.
+ */
 public class ConfigManager {
   private static final String LINE_START = "LINE_START";
   private static final String LINE_END = "LINE_END";
@@ -33,6 +36,9 @@ public class ConfigManager {
   private List<Route> routes = new ArrayList<Route>();
   private StorageFacility storageFacility;
 
+  /**
+   * Empty constructor for ConfigManager.
+   */
   public ConfigManager() {
     storageFacility = null;
   }

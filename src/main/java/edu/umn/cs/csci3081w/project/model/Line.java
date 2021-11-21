@@ -2,6 +2,9 @@ package edu.umn.cs.csci3081w.project.model;
 
 import java.io.PrintStream;
 
+/**
+ * A wrapper class that contains outbound and inbound route for the vehicle.
+ */
 public class Line {
 
   public static final String BUS_LINE = "BUS_LINE";

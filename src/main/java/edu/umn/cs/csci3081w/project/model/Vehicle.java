@@ -4,6 +4,9 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * An abstract class that represents a Vehicle in the simulation.
+ */
 public abstract class Vehicle {
   private int id;
   private int capacity;
@@ -46,7 +49,7 @@ public abstract class Vehicle {
   public abstract int getCurrentCO2Emission();
 
   /**
-   * Report statistics for the train.
+   * Report statistics for the vehicle.
    *
    * @param out stream for printing
    */
@@ -65,6 +68,11 @@ public abstract class Vehicle {
     out.println("****Passengers Info End****");
   }
 
+  /**
+   * Checking if the trip is done.
+   * @return true if vehicle completed the trip, false otherwise
+   *
+   */
   public boolean isTripComplete() {
     return line.getOutboundRoute().isAtEnd() && line.getInboundRoute().isAtEnd();
   }
@@ -74,11 +82,11 @@ public abstract class Vehicle {
   }
 
   /**
-   * Moves the train on its route.
+   * Moves the vehicle on its route.
    */
   public void move() {
     // update passengers FIRST
-    // new passengers will get "updated" when getting on the train
+    // new passengers will get "updated" when getting on the vehicle
     for (Passenger passenger : getPassengers()) {
       passenger.pasUpdate();
     }
@@ -86,7 +94,7 @@ public abstract class Vehicle {
     double speed = updateDistance();
     if (!isTripComplete() && distanceRemaining <= 0) {
       //load & unload
-      int passengersHandled = handleTrainStop();
+      int passengersHandled = handleVehicleStop();
       if (passengersHandled >= 0) {
         // if we spent time unloading/loading
         // we don't get to count excess distance towards next stop
@@ -127,7 +135,7 @@ public abstract class Vehicle {
   }
 
   /**
-   * Update the simulation state for this train.
+   * Update the simulation state for this vehicle.
    */
   public void update() {
     move();
@@ -137,8 +145,8 @@ public abstract class Vehicle {
     return getPassengerUnloader().unloadPassengers(getPassengers(), nextStop);
   }
 
-  private int handleTrainStop() {
-    // This function handles arrival at a train stop
+  private int handleVehicleStop() {
+    // This function handles arrival at a stop
     int passengersHandled = 0;
     // unloading passengers
     passengersHandled += unloadPassengers();
@@ -174,8 +182,8 @@ public abstract class Vehicle {
   }
 
   private double updateDistance() {
-    // Updates the distance remaining and returns the effective speed of the train
-    // Train does not move if speed is negative or train is at end of route
+    // Updates the distance remaining and returns the effective speed of the vehicle
+    // Vehicle does not move if speed is negative or vehicle is at end of route
     if (isTripComplete()) {
       return 0;
     }
