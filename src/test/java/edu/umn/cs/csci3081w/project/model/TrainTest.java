@@ -57,7 +57,7 @@ public class TrainTest {
 
     testTrain = new DieselTrain(1,
         new Line(10000, "testLine", "TRAIN", testRouteOut, testRouteIn),
-        3, 1.0);
+        1.0);
   }
 
   /**
@@ -67,7 +67,7 @@ public class TrainTest {
   public void testConstructor() {
     assertEquals(1, testTrain.getId());
     assertEquals("testRouteOut1", testTrain.getName());
-    assertEquals(3, testTrain.getCapacity());
+    assertEquals(120, testTrain.getCapacity());
     assertEquals(1, testTrain.getSpeed());
     assertEquals(testRouteOut, testTrain.getLine().getOutboundRoute());
     assertEquals(testRouteIn, testTrain.getLine().getInboundRoute());
@@ -93,16 +93,12 @@ public class TrainTest {
    */
   @Test
   public void testLoadPassenger() {
-
-    Passenger testPassenger1 = new Passenger(3, "testPassenger1");
-    Passenger testPassenger2 = new Passenger(2, "testPassenger2");
-    Passenger testPassenger3 = new Passenger(1, "testPassenger3");
-    Passenger testPassenger4 = new Passenger(1, "testPassenger4");
-
-    assertEquals(1, testTrain.loadPassenger(testPassenger1));
-    assertEquals(1, testTrain.loadPassenger(testPassenger2));
-    assertEquals(1, testTrain.loadPassenger(testPassenger3));
-    assertEquals(0, testTrain.loadPassenger(testPassenger4));
+    for (int i = 0; i < testTrain.getCapacity(); i++) {
+      Passenger newPassenger = new Passenger(3, String.format("testPassenger%d", i));
+      assertEquals(1, testTrain.loadPassenger(newPassenger));
+    }
+    Passenger extraGuy = new Passenger(2, "I can't get on the train");
+    assertEquals(0, testTrain.loadPassenger(extraGuy));
   }
 
 
@@ -181,7 +177,7 @@ public class TrainTest {
               + "ID: 1" + System.lineSeparator()
               + "Name: testRouteOut1" + System.lineSeparator()
               + "Speed: 1.0" + System.lineSeparator()
-              + "Capacity: 3" + System.lineSeparator()
+              + "Capacity: 120" + System.lineSeparator()
               + "Position: 44.97358,-93.235071" + System.lineSeparator()
               + "Distance to next stop: 0.843774422231134" + System.lineSeparator()
               + "****Passengers Info Start****" + System.lineSeparator()

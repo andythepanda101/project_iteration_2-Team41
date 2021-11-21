@@ -26,6 +26,9 @@ public class VisualTransitSimulator {
   private LocalDateTime time = LocalDateTime.now();
   private DayBusStrategy dayBus = new DayBusStrategy();
   private NightBusStrategy nightBus = new NightBusStrategy();
+  private TrainFactory trainFact = new TrainFactory();
+  private DayTrainStrategy dayTrain = new DayTrainStrategy();
+  private NightTrainStrategy nightTrain = new NightTrainStrategy();
 
   /**
    * Constructor for Simulation.
@@ -46,7 +49,7 @@ public class VisualTransitSimulator {
     this.timeSinceLastVehicle = new ArrayList<Integer>();
     this.storageFacility = configManager.getStorageFacility();
     if (this.storageFacility == null) {
-      this.storageFacility = new StorageFacility(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
+      this.storageFacility = new StorageFacility(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
     }
 
     if (VisualTransitSimulator.LOGGING) {
@@ -97,7 +100,7 @@ public class VisualTransitSimulator {
             busFact.setBusStrategy(nightBus);
             dayBus.resetCount();
           }
-          Bus newBus = busFact.createVehicle(counter.getBusIdCounterAndIncrement(), line.shallowCopy(), SmallBus.SPEED);
+          Bus newBus = busFact.createVehicle(counter.getBusIdCounterAndIncrement(), line.shallowCopy(), Bus.SPEED);
           if (newBus instanceof SmallBus && this.storageFacility.getSmallBusesNum() > 0) {
             activeVehicles.add(newBus);
             this.storageFacility.decrementSmallBusesNum();
@@ -111,11 +114,24 @@ public class VisualTransitSimulator {
           timeSinceLastVehicle.set(i, vehicleStartTimings.get(i));
           timeSinceLastVehicle.set(i, timeSinceLastVehicle.get(i) - 1);
         } else if (line.getType().equals(Line.TRAIN_LINE)) {
-          if (storageFacility.getTrainsNum() > 0) {
-            activeVehicles
-                .add(new DieselTrain(counter.getTrainIdCounterAndIncrement(), line.shallowCopy(),
-                    Train.CAPACITY, Train.SPEED));
-            this.storageFacility.decrementTrainsNum();
+          // Setting Train Strategy
+          if ( !(trainFact.getStrategy() instanceof DayBusStrategy) && (time.getHour() >= 8) && (time.getHour() < 16) ) {
+            trainFact.setTrainStrategy(dayTrain);
+            nightTrain.resetCount();
+          } else if ( !(trainFact.getStrategy() instanceof NightBusStrategy) && ((time.getHour() < 8) || (time.getHour() >= 16)) ) {
+            trainFact.setTrainStrategy(nightTrain);
+            dayTrain.resetCount();
+          }
+          Train newTrain = trainFact.createVehicle(counter.getTrainIdCounterAndIncrement(), line.shallowCopy(), Train.SPEED);
+          if (newTrain instanceof ElectricTrain && this.storageFacility.getElectricTrainsNum() > 0) {
+            activeVehicles.add(newTrain);
+            this.storageFacility.decrementElectricTrainsNum();
+          } else if (newTrain instanceof DieselTrain && this.storageFacility.getDieselTrainsNum() > 0) {
+            activeVehicles.add(newTrain);
+            this.storageFacility.decrementDieselTrainsNum();
+          } else {
+            counter.trainIdCounter--;
+            trainFact.getStrategy().decrementCount();
           }
           timeSinceLastVehicle.set(i, vehicleStartTimings.get(i));
           timeSinceLastVehicle.set(i, timeSinceLastVehicle.get(i) - 1);
@@ -135,8 +151,10 @@ public class VisualTransitSimulator {
           this.storageFacility.incrementSmallBusesNum();
         } else if (completedTripVehicle instanceof LargeBus) {
           this.storageFacility.incrementLargeBusesNum();
-        } else if (completedTripVehicle instanceof Train) {
-          this.storageFacility.incrementTrainsNum();
+        } else if (completedTripVehicle instanceof ElectricTrain) {
+          this.storageFacility.incrementElectricTrainsNum();
+        } else if (completedTripVehicle instanceof DieselTrain) {
+          this.storageFacility.incrementDieselTrainsNum();
         }
       } else {
         if (VisualTransitSimulator.LOGGING) {
