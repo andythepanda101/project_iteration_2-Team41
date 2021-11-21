@@ -86,8 +86,6 @@ public class VisualTransitSimulator {
     // generate vehicles
     for (int i = 0; i < timeSinceLastVehicle.size(); i++) {
       if (timeSinceLastVehicle.get(i) <= 0) {
-        Route outbound = lines.get(i).getOutboundRoute();
-        Route inbound = lines.get(i).getInboundRoute();
         Line line = lines.get(i);
         if (line.getType().equals(Line.BUS_LINE)) {
           // Setting Bus Strategy
