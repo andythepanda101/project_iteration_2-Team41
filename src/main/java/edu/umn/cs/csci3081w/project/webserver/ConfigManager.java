@@ -23,7 +23,8 @@ public class ConfigManager {
   private static final String BUS_LINE = "BUS_LINE";
   private static final String TRAIN_LINE = "TRAIN_LINE";
   private static final String STORAGE_FACILITY_START = "STORAGE_FACILITY_START";
-  private static final String BUSES = "BUSES";
+  private static final String SMALL_BUSES = "SMALL_BUSES";
+  private static final String LARGE_BUSES = "LARGE_BUSES";
   private static final String TRAINS = "TRAINS";
   private static final String STOP = "STOP";
 
@@ -112,9 +113,12 @@ public class ConfigManager {
               new Position(currStopLongitude, currStopLatitude)));
         } else if (chunk.equals(ConfigManager.STORAGE_FACILITY_START)) {
           this.storageFacility = new StorageFacility();
-        } else if (chunk.equals(ConfigManager.BUSES)) {
+        } else if (chunk.equals(ConfigManager.SMALL_BUSES)) {
           int numBuses = Integer.parseInt(splits[1].trim());
-          this.storageFacility.setBusesNum(numBuses);
+          this.storageFacility.setSmallBusesNum(numBuses);
+        } else if (chunk.equals(ConfigManager.LARGE_BUSES)) {
+          int numBuses = Integer.parseInt(splits[1].trim());
+          this.storageFacility.setLargeBusesNum(numBuses);
         } else if (chunk.equals(ConfigManager.TRAINS)) {
           int numTrains = Integer.parseInt(splits[1].trim());
           this.storageFacility.setTrainsNum(numTrains);
