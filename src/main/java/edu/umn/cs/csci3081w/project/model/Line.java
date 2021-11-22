@@ -81,9 +81,13 @@ public class Line {
     return this.inboundRoute;
   }
 
-  public int getIssuesRemainingSteps() { return this.issuesRemainingSteps; }
+  public int getIssuesRemainingSteps() {
+    return this.issuesRemainingSteps;
+  }
 
-  public void setIssuesRemainingSteps(int steps) { this.issuesRemainingSteps = steps; }
+  public void setIssuesRemainingSteps(int steps) {
+    this.issuesRemainingSteps = steps;
+  }
 
 
 }

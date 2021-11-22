@@ -3,7 +3,6 @@ package edu.umn.cs.csci3081w.project.webserver;
 import com.google.gson.JsonObject;
 import edu.umn.cs.csci3081w.project.model.Line;
 import java.util.List;
-import java.util.ArrayList;
 
 public class LineIssueCommand extends SimulatorCommand {
 
@@ -15,7 +14,7 @@ public class LineIssueCommand extends SimulatorCommand {
 
   /**
    * Updates the state of the simulation but accounting
-   * for possible Line issues that may have arisen
+   * for possible Line issues that may have arisen.
    *
    * @param session current simulation session
    * @param command the update simulation command content

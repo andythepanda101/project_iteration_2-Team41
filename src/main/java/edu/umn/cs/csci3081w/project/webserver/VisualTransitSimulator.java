@@ -175,7 +175,8 @@ public class VisualTransitSimulator {
         Line currLineLoop = lines.get(index);
         // if currVehicle is on the same Line that we're currently
         // on in the loop, AND that Line has issue
-        if (currVehicle.getLine().getId() == currLineLoop.getId() && currLineLoop.getIssuesRemainingSteps() > 0) {
+        if (currVehicle.getLine().getId() == currLineLoop.getId()
+            && currLineLoop.getIssuesRemainingSteps() > 0) {
           // if vehicle is this line do nothing
           currVehicleHasIssue = true;
           break;
@@ -226,6 +227,8 @@ public class VisualTransitSimulator {
     return activeVehicles;
   }
 
-  public List<Line> getLines() { return lines; }
+  public List<Line> getLines() {
+    return lines;
+  }
 
 }
