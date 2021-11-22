@@ -4,6 +4,9 @@ import com.google.gson.JsonObject;
 import edu.umn.cs.csci3081w.project.model.Line;
 import java.util.List;
 
+/**
+ * This is a class to simulate stops in bus and train lines.
+ */
 public class LineIssueCommand extends SimulatorCommand {
 
   private VisualTransitSimulator simulator;

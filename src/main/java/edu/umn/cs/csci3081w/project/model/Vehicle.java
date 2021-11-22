@@ -3,7 +3,6 @@ package edu.umn.cs.csci3081w.project.model;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -59,12 +58,18 @@ public abstract class Vehicle {
 
   public abstract int getCurrentCO2Emission();
 
+  /**
+   * Removes the oldest CO2 emission amount and adds a new measure of
+   *  CO2 emissions.
+   */
   public void updateEmissionsList() {
     this.getLast5CO2().add(0, getCurrentCO2Emission());
     this.getLast5CO2().remove(this.getLast5CO2().size() - 1);
   }
 
-  public List<Integer> getLast5CO2() { return last5C02; }
+  public List<Integer> getLast5CO2() {
+    return last5C02;
+  }
 
   /**
    * Report statistics for the vehicle.
