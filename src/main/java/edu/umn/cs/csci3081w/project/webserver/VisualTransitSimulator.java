@@ -169,6 +169,8 @@ public class VisualTransitSimulator {
     // update vehicles
     for (int i = activeVehicles.size() - 1; i >= 0; i--) {
       Vehicle currVehicle = activeVehicles.get(i);
+      currVehicle.getLast5CO2().add(0, currVehicle.getCurrentCO2Emission());
+      currVehicle.getLast5CO2().remove(currVehicle.getLast5CO2().size());
       // begin feature 5
       boolean currVehicleHasIssue = false;
       for (int index = 0; index < lines.size(); index++) { // loop through each line
