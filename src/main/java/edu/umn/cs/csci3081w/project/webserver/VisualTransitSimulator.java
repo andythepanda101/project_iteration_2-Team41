@@ -25,6 +25,10 @@ public class VisualTransitSimulator {
   private List<Integer> timeSinceLastVehicle;
   private StorageFacility storageFacility;
   private WebServerSession webServerSession;
+  // Feature 5 additions (rm) comment
+  //private List<String> lineIdsWithIssues;
+  // counter for remaining time steps frozen
+  //private List<Integer> lineIdsWithIssuesTimer;
 
   /**
    * Constructor for Simulation.
@@ -44,6 +48,8 @@ public class VisualTransitSimulator {
     this.vehicleStartTimings = new ArrayList<Integer>();
     this.timeSinceLastVehicle = new ArrayList<Integer>();
     this.storageFacility = configManager.getStorageFacility();
+    //this.lineIdsWithIssues = new ArrayList<String>();
+    //this.lineIdsWithIssuesTimer = new ArrayList<Integer>();
     if (this.storageFacility == null) {
       this.storageFacility = new StorageFacility(Integer.MAX_VALUE, Integer.MAX_VALUE);
     }
@@ -87,33 +93,53 @@ public class VisualTransitSimulator {
         Route outbound = routes.get(2 * i);
         Route inbound = routes.get(2 * i + 1);
         Line line = findLineBasedOnRoute(outbound);
-        if (line.getType().equals(Line.BUS_LINE)) {
-          if (storageFacility.getBusesNum() > 0) {
-            activeVehicles
-                .add(new Bus(counter.getBusIdCounterAndIncrement(), line.shallowCopy(),
-                    Bus.CAPACITY, Bus.SPEED));
-            this.storageFacility.decrementBusesNum();
+        System.out.println("in gen vehicle loop, line " + line.getId() + "has steps " + line.getIssuesRemainingSteps());
+        // feature 5, added wrapper if(line.getIssuesRemainingSteps() <= 0)
+        if (line.getIssuesRemainingSteps() <= 0) {
+          if (line.getType().equals(Line.BUS_LINE)) {
+            if (storageFacility.getBusesNum() > 0) {
+              activeVehicles
+                  .add(new Bus(counter.getBusIdCounterAndIncrement(), line.shallowCopy(),
+                      Bus.CAPACITY, Bus.SPEED));
+              this.storageFacility.decrementBusesNum();
+            }
+            timeSinceLastVehicle.set(i, vehicleStartTimings.get(i));
+            timeSinceLastVehicle.set(i, timeSinceLastVehicle.get(i) - 1);
+          } else if (line.getType().equals(Line.TRAIN_LINE)) {
+            if (storageFacility.getTrainsNum() > 0) {
+              activeVehicles
+                  .add(new Train(counter.getTrainIdCounterAndIncrement(), line.shallowCopy(),
+                      Train.CAPACITY, Train.SPEED));
+              this.storageFacility.decrementTrainsNum();
+            }
+            timeSinceLastVehicle.set(i, vehicleStartTimings.get(i));
+            timeSinceLastVehicle.set(i, timeSinceLastVehicle.get(i) - 1);
           }
-          timeSinceLastVehicle.set(i, vehicleStartTimings.get(i));
-          timeSinceLastVehicle.set(i, timeSinceLastVehicle.get(i) - 1);
-        } else if (line.getType().equals(Line.TRAIN_LINE)) {
-          if (storageFacility.getTrainsNum() > 0) {
-            activeVehicles
-                .add(new Train(counter.getTrainIdCounterAndIncrement(), line.shallowCopy(),
-                    Train.CAPACITY, Train.SPEED));
-            this.storageFacility.decrementTrainsNum();
-          }
-          timeSinceLastVehicle.set(i, vehicleStartTimings.get(i));
-          timeSinceLastVehicle.set(i, timeSinceLastVehicle.get(i) - 1);
         }
       } else {
         timeSinceLastVehicle.set(i, timeSinceLastVehicle.get(i) - 1);
       }
     }
     // update vehicles
-    for (int i = activeVehicles.size() - 1; i >= 0; i--) {
+    for (int i = activeVehicles.size() - 1; i >= 0; i--) { // loop through each vehicle $
       Vehicle currVehicle = activeVehicles.get(i);
-      currVehicle.update();
+      // begin feature 5
+      boolean currVehicleHasIssue = false;
+      for (int index = 0; index < lines.size(); index++) { // loop through each line
+        Line currLineLoop = lines.get(index);
+        // if currVehicle is on the same Line that we're currently
+        // on in the loop, AND that Line has issue
+        if (currVehicle.getLine().getId() == currLineLoop.getId() && currLineLoop.getIssuesRemainingSteps() > 0) {
+          // if vehicle is this line do nothing
+          // System.out.println(currVehicle.getId() + " not moving cuz line " + currLineLoop.getId() + " has steps: " + currLineLoop.getIssuesRemainingSteps());
+          currVehicleHasIssue = true;
+          break;
+        }
+      }
+      if (!currVehicleHasIssue) {
+        currVehicle.update();
+      }
+      // end feature 5
       if (currVehicle.isTripComplete()) {
         Vehicle completedTripVehicle = activeVehicles.remove(i);
         completedTripVehicles.add(completedTripVehicle);
@@ -134,6 +160,13 @@ public class VisualTransitSimulator {
       currRoute.update();
       if (VisualTransitSimulator.LOGGING) {
         currRoute.report(System.out);
+      }
+    }
+    // decrement issue counter at end of this time step (feature 5)
+    for (int index = 0; index < lines.size(); index++) { // loop through each line
+      Line currLineLoop = lines.get(index);
+      if (currLineLoop.getIssuesRemainingSteps() > 0) {
+        currLineLoop.setIssuesRemainingSteps(currLineLoop.getIssuesRemainingSteps() - 1);
       }
     }
   }
@@ -161,4 +194,7 @@ public class VisualTransitSimulator {
   public List<Vehicle> getActiveVehicles() {
     return activeVehicles;
   }
+
+  public List<Line> getLines() { return lines; }
+
 }

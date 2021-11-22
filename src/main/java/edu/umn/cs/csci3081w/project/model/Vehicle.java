@@ -1,5 +1,6 @@
 package edu.umn.cs.csci3081w.project.model;
 
+
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,7 @@ public abstract class Vehicle {
   private List<Passenger> passengers;
   private String name;
   private Position position;
+  private Line line; // added to fix feature 5
 
 
   /**
@@ -86,4 +88,6 @@ public abstract class Vehicle {
   public void setPosition(Position position) {
     this.position = position;
   }
+
+  public abstract Line getLine(); // feature 5 fix
 }
