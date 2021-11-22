@@ -163,7 +163,9 @@ public class VisualTransitSimulator {
           }
         }
       } else {
-        timeSinceLastVehicle.set(i, timeSinceLastVehicle.get(i) - 1);
+        if (lines.get(i).getIssuesRemainingSteps() <= 0) {
+          timeSinceLastVehicle.set(i, timeSinceLastVehicle.get(i) - 1);
+        }
       }
     }
     // update vehicles
