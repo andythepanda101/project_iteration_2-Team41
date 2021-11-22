@@ -167,7 +167,7 @@ public class VisualTransitSimulator {
       }
     }
     // update vehicles
-    for (int i = activeVehicles.size() - 1; i >= 0; i--) { // loop through each vehicle $
+    for (int i = activeVehicles.size() - 1; i >= 0; i--) {
       Vehicle currVehicle = activeVehicles.get(i);
       // begin feature 5
       boolean currVehicleHasIssue = false;
@@ -177,7 +177,6 @@ public class VisualTransitSimulator {
         // on in the loop, AND that Line has issue
         if (currVehicle.getLine().getId() == currLineLoop.getId() && currLineLoop.getIssuesRemainingSteps() > 0) {
           // if vehicle is this line do nothing
-          // System.out.println(currVehicle.getId() + " not moving cuz line " + currLineLoop.getId() + " has steps: " + currLineLoop.getIssuesRemainingSteps());
           currVehicleHasIssue = true;
           break;
         }

@@ -29,9 +29,7 @@ public class LineIssueCommand extends SimulatorCommand {
       currentSimLine = simulatorLines.get(index);
       if (currentSimLine.getId() == lineWithIssueId) {
         currentSimLine.setIssuesRemainingSteps(currentSimLine.getIssuesRemainingSteps() + 10);
-        System.out.println(currentSimLine.getIssuesRemainingSteps());
       }
     }
-    System.out.println(lineWithIssueId);
   }
 }
