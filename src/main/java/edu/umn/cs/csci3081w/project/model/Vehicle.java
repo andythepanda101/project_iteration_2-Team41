@@ -61,7 +61,7 @@ public abstract class Vehicle {
 
   public void updateEmissionsList() {
     this.getLast5CO2().add(0, getCurrentCO2Emission());
-    this.getLast5CO2().remove(this.getLast5CO2().size());
+    this.getLast5CO2().remove(this.getLast5CO2().size() - 1);
   }
 
   public List<Integer> getLast5CO2() { return last5C02; }

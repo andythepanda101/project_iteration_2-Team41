@@ -19,10 +19,17 @@ public class RegisterVehicleCommand extends SimulatorCommand {
         JsonObject outCommand = new JsonObject();
         outCommand.addProperty("command", "observedVehicle");
         Position currPos = simulator.getActiveVehicles().get(i).getPosition();
+        String vehicleType;
+        if (simulator.getActiveVehicles().get(i) instanceof Train) {
+          vehicleType = "TRAIN";
+        } else {
+          vehicleType = "BUS";
+        }
         String information = simulator.getActiveVehicles().get(i).getId() + "\n"
                              + "-----------------------------\n" +
-                                "* Type: (" + Double.toString(currPos.getLongitude()) + ", "
-                                            + Double.toString(currPos.getLatitude()) + ")\n"
+                                "* Type: " + vehicleType + "\n"
+                              + "* Position: (" + Double.toString(currPos.getLongitude()) + ", "
+                                                + Double.toString(currPos.getLatitude()) + ")\n"
                               + "* Passengers: " + simulator.getActiveVehicles().get(i).getPassengers().size() + "\n"
                               + "* CO2: ";
         List<Integer> co2List = simulator.getActiveVehicles().get(i).getLast5CO2();
