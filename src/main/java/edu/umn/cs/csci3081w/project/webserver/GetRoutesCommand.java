@@ -2,7 +2,7 @@ package edu.umn.cs.csci3081w.project.webserver;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import edu.umn.cs.csci3081w.project.model.Route;
+import edu.umn.cs.csci3081w.project.model.Line;
 import java.util.List;
 
 /**
@@ -28,25 +28,40 @@ public class GetRoutesCommand extends SimulatorCommand {
    */
   @Override
   public void execute(WebServerSession session, JsonObject command) {
-    List<Route> routes = simulator.getRoutes();
+    List<Line> lines = simulator.getLines();
     JsonObject data = new JsonObject();
     data.addProperty("command", "updateRoutes");
     JsonArray routesArray = new JsonArray();
-    for (int i = 0; i < routes.size(); i++) {
+    for (int i = 0; i < lines.size(); i++) {
       JsonObject r = new JsonObject();
-      r.addProperty("id", routes.get(i).getId());
+      r.addProperty("id", lines.get(i).getId());
       JsonArray stopArray = new JsonArray();
-      for (int j = 0; j < (routes.get(i).getStops().size()); j++) {
-        JsonObject stopStruct = new JsonObject();
-        stopStruct.addProperty("id", routes.get(i).getStops().get(j).getId());
-        stopStruct.addProperty("numPeople", routes.get(i).getStops().get(j).getPassengers().size());
-        JsonObject jsonObj = new JsonObject();
-        jsonObj.addProperty("longitude",
-            routes.get(i).getStops().get(j).getPosition().getLongitude());
-        jsonObj.addProperty("latitude",
-            routes.get(i).getStops().get(j).getPosition().getLatitude());
-        stopStruct.add("position", jsonObj);
-        stopArray.add(stopStruct);
+      for (int j = 0; j < (lines.get(i).getOutboundRoute().getStops().size()); j++) {
+        JsonObject stopOutStruct = new JsonObject();
+        stopOutStruct.addProperty("id", lines.get(i).getOutboundRoute().getStops().get(j).getId());
+        stopOutStruct.addProperty("numPeople",
+            lines.get(i).getOutboundRoute().getStops().get(j).getPassengers().size());
+        JsonObject jsonObjOut = new JsonObject();
+        jsonObjOut.addProperty("longitude",
+            lines.get(i).getOutboundRoute().getStops().get(j).getPosition().getLongitude());
+        jsonObjOut.addProperty("latitude",
+            lines.get(i).getOutboundRoute().getStops().get(j).getPosition().getLatitude());
+        stopOutStruct.add("position", jsonObjOut);
+        stopArray.add(stopOutStruct);
+      }
+
+      for (int j = 0; j < (lines.get(i).getInboundRoute().getStops().size()); j++) {
+        JsonObject stopOutStruct = new JsonObject();
+        stopOutStruct.addProperty("id", lines.get(i).getInboundRoute().getStops().get(j).getId());
+        stopOutStruct.addProperty("numPeople",
+            lines.get(i).getInboundRoute().getStops().get(j).getPassengers().size());
+        JsonObject jsonObjOut = new JsonObject();
+        jsonObjOut.addProperty("longitude",
+            lines.get(i).getInboundRoute().getStops().get(j).getPosition().getLongitude());
+        jsonObjOut.addProperty("latitude",
+            lines.get(i).getInboundRoute().getStops().get(j).getPosition().getLatitude());
+        stopOutStruct.add("position", jsonObjOut);
+        stopArray.add(stopOutStruct);
       }
       r.add("stops", stopArray);
       routesArray.add(r);

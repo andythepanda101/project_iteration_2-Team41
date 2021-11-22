@@ -31,7 +31,6 @@ public class VisualTransitSimulator {
   private int simulationTimeElapsed = 0;
   private Counter counter;
   private List<Line> lines;
-  private List<Route> routes;
   private List<Vehicle> activeVehicles;
   private List<Vehicle> completedTripVehicles;
   private List<Integer> vehicleStartTimings;
@@ -58,7 +57,6 @@ public class VisualTransitSimulator {
     ConfigManager configManager = new ConfigManager();
     configManager.readConfig(counter, configFile);
     this.lines = configManager.getLines();
-    this.routes = configManager.getRoutes();
     this.activeVehicles = new ArrayList<Vehicle>();
     this.completedTripVehicles = new ArrayList<Vehicle>();
     this.vehicleStartTimings = new ArrayList<Integer>();
@@ -71,8 +69,8 @@ public class VisualTransitSimulator {
 
     if (VisualTransitSimulator.LOGGING) {
       System.out.println("////Simulation Routes////");
-      for (int i = 0; i < routes.size(); i++) {
-        routes.get(i).report(System.out);
+      for (int i = 0; i < lines.size(); i++) {
+        lines.get(i).report(System.out);
       }
     }
   }
@@ -105,9 +103,7 @@ public class VisualTransitSimulator {
     // generate vehicles
     for (int i = 0; i < timeSinceLastVehicle.size(); i++) {
       if (timeSinceLastVehicle.get(i) <= 0) {
-        Route outbound = routes.get(2 * i);
-        Route inbound = routes.get(2 * i + 1);
-        Line line = findLineBasedOnRoute(outbound);
+        Line line = lines.get(i);
         if (line.getType().equals(Line.BUS_LINE)) {
           // Setting Bus Strategy
           if (!(busFact.getStrategy() instanceof DayBusStrategy)
@@ -189,8 +185,10 @@ public class VisualTransitSimulator {
       }
     }
     // update routes
-    for (int i = 0; i < routes.size(); i++) {
-      Route currRoute = routes.get(i);
+    for (int i = 0; i < lines.size(); i++) {
+      Route currRoute = lines.get(i).getOutboundRoute();
+      currRoute.update();
+      currRoute = lines.get(i).getInboundRoute();
       currRoute.update();
       if (VisualTransitSimulator.LOGGING) {
         currRoute.report(System.out);
@@ -198,27 +196,11 @@ public class VisualTransitSimulator {
     }
   }
 
-  /**
-   * Method to find the line of a route.
-   *
-   * @param route route to search
-   * @return Line containing route
-   */
-  public Line findLineBasedOnRoute(Route route) {
-    for (Line line : lines) {
-      if (line.getOutboundRoute().getId() == route.getId()
-          || line.getInboundRoute().getId() == route.getId()) {
-        return line;
-      }
-    }
-    throw new RuntimeException("Could not find the line of the route");
-  }
-
-  public List<Route> getRoutes() {
-    return routes;
-  }
-
   public List<Vehicle> getActiveVehicles() {
     return activeVehicles;
+  }
+
+  public List<Line> getLines() {
+    return lines;
   }
 }
