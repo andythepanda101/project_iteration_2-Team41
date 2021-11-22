@@ -7,13 +7,13 @@ import java.util.List;
  * A strategy class that creates buses for nighttime simulation.
  */
 public class NightBusStrategy implements BusStrategy {
-  private static int busCount = 0;
+  private int busCount = 0;
   private final List<String> busSequence = Arrays.asList("small", "small", "small", "large");
 
   /**
    * Creates a large or small bus based on the pre-defined sequence.
    * @param id       bus identifier
-   * @param line     a wrapper class that has routes
+   * @param line     route of in/out bound
    * @param speed    speed of bus
    * @return  created bus
    */

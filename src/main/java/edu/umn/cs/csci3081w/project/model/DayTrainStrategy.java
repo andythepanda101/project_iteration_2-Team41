@@ -7,14 +7,14 @@ import java.util.List;
  * A strategy class that creates trains for daytime simulation.
  */
 public class DayTrainStrategy implements TrainStrategy {
-  private static int trainCount = 0;
+  private int trainCount = 0;
   private final List<String> trainSequence =
       Arrays.asList("electric", "electric", "electric", "diesel");
 
   /**
    * Creates an electric or diesel train based on the pre-defined sequence.
    * @param id       train identifier
-   * @param line     a wrapper class that has routes
+   * @param line     route of in/out bound
    * @param speed    speed of train
    * @return  created train
    */

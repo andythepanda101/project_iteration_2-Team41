@@ -25,6 +25,7 @@ public abstract class Vehicle {
    * Constructor for a vehicle.
    *
    * @param id       vehicle identifier
+   * @param line     route of in/out bound
    * @param capacity vehicle capacity
    * @param speed    vehicle speed
    * @param loader   passenger loader for vehicle
@@ -77,6 +78,11 @@ public abstract class Vehicle {
     return line.getOutboundRoute().isAtEnd() && line.getInboundRoute().isAtEnd();
   }
 
+  /**
+   * Loads the passengers onto a vehicle.
+   * @param newPassenger a passenger to be loaded
+   * @return number of loaded passengers
+   */
   public int loadPassenger(Passenger newPassenger) {
     return getPassengerLoader().loadPassenger(newPassenger, getCapacity(), getPassengers());
   }
