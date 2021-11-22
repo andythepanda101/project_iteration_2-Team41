@@ -18,13 +18,9 @@ public abstract class Vehicle {
   private List<Passenger> passengers;
   private String name;
   private Position position;
-<<<<<<< HEAD
   private Line line;
   private double distanceRemaining;
   private Stop nextStop;
-=======
-  private Line line; // added to fix feature 5
->>>>>>> 6f912e89362ed91dba8916e90b42d69474f49a96
 
 
   /**
@@ -261,9 +257,5 @@ public abstract class Vehicle {
   public void setPosition(Position position) {
     this.position = position;
   }
-
-<<<<<<< HEAD
-=======
-  public abstract Line getLine(); // feature 5 fix
->>>>>>> 6f912e89362ed91dba8916e90b42d69474f49a96
+  
 }

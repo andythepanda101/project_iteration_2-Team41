@@ -37,7 +37,6 @@ public class VisualTransitSimulator {
   private List<Integer> timeSinceLastVehicle;
   private StorageFacility storageFacility;
   private WebServerSession webServerSession;
-<<<<<<< HEAD
   private BusFactory busFact = new BusFactory();
   private LocalDateTime time = LocalDateTime.now();
   private DayBusStrategy dayBus = new DayBusStrategy();
@@ -45,12 +44,6 @@ public class VisualTransitSimulator {
   private TrainFactory trainFact = new TrainFactory();
   private DayTrainStrategy dayTrain = new DayTrainStrategy();
   private NightTrainStrategy nightTrain = new NightTrainStrategy();
-=======
-  // Feature 5 additions (rm) comment
-  //private List<String> lineIdsWithIssues;
-  // counter for remaining time steps frozen
-  //private List<Integer> lineIdsWithIssuesTimer;
->>>>>>> 6f912e89362ed91dba8916e90b42d69474f49a96
 
   /**
    * Constructor for Simulation.
@@ -112,7 +105,6 @@ public class VisualTransitSimulator {
     // generate vehicles
     for (int i = 0; i < timeSinceLastVehicle.size(); i++) {
       if (timeSinceLastVehicle.get(i) <= 0) {
-<<<<<<< HEAD
         Line line = lines.get(i);
         if (line.getIssuesRemainingSteps() <= 0) {
           if (line.getType().equals(Line.BUS_LINE)) {
@@ -137,25 +129,10 @@ public class VisualTransitSimulator {
             } else {
               counter.busIdCounter--;
               busFact.getStrategy().decrementCount();
-=======
-        Route outbound = routes.get(2 * i);
-        Route inbound = routes.get(2 * i + 1);
-        Line line = findLineBasedOnRoute(outbound);
-        System.out.println("in gen vehicle loop, line " + line.getId() + "has steps " + line.getIssuesRemainingSteps());
-        // feature 5, added wrapper if(line.getIssuesRemainingSteps() <= 0)
-        if (line.getIssuesRemainingSteps() <= 0) {
-          if (line.getType().equals(Line.BUS_LINE)) {
-            if (storageFacility.getBusesNum() > 0) {
-              activeVehicles
-                  .add(new Bus(counter.getBusIdCounterAndIncrement(), line.shallowCopy(),
-                      Bus.CAPACITY, Bus.SPEED));
-              this.storageFacility.decrementBusesNum();
->>>>>>> 6f912e89362ed91dba8916e90b42d69474f49a96
             }
             timeSinceLastVehicle.set(i, vehicleStartTimings.get(i));
             timeSinceLastVehicle.set(i, timeSinceLastVehicle.get(i) - 1);
           } else if (line.getType().equals(Line.TRAIN_LINE)) {
-<<<<<<< HEAD
             // Setting Train Strategy
             if (!(trainFact.getStrategy() instanceof DayBusStrategy)
                 && (time.getHour() >= 8) && (time.getHour() < 16)) {
@@ -180,13 +157,6 @@ public class VisualTransitSimulator {
             } else {
               counter.trainIdCounter--;
               trainFact.getStrategy().decrementCount();
-=======
-            if (storageFacility.getTrainsNum() > 0) {
-              activeVehicles
-                  .add(new Train(counter.getTrainIdCounterAndIncrement(), line.shallowCopy(),
-                      Train.CAPACITY, Train.SPEED));
-              this.storageFacility.decrementTrainsNum();
->>>>>>> 6f912e89362ed91dba8916e90b42d69474f49a96
             }
             timeSinceLastVehicle.set(i, vehicleStartTimings.get(i));
             timeSinceLastVehicle.set(i, timeSinceLastVehicle.get(i) - 1);
@@ -249,24 +219,6 @@ public class VisualTransitSimulator {
       Line currLineLoop = lines.get(index);
       if (currLineLoop.getIssuesRemainingSteps() > 0) {
         currLineLoop.setIssuesRemainingSteps(currLineLoop.getIssuesRemainingSteps() - 1);
-<<<<<<< HEAD
-=======
-      }
-    }
-  }
-
-  /**
-   * Method to find the line of a route.
-   *
-   * @param route route to search
-   * @return Line containing route
-   */
-  public Line findLineBasedOnRoute(Route route) {
-    for (Line line : lines) {
-      if (line.getOutboundRoute().getId() == route.getId()
-          || line.getInboundRoute().getId() == route.getId()) {
-        return line;
->>>>>>> 6f912e89362ed91dba8916e90b42d69474f49a96
       }
     }
   }
