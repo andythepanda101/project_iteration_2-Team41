@@ -1,5 +1,6 @@
 package edu.umn.cs.csci3081w.project.model;
 
+
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,7 @@ public abstract class Vehicle {
   private Line line;
   private double distanceRemaining;
   private Stop nextStop;
+
 
   /**
    * Constructor for a vehicle.
@@ -255,4 +257,5 @@ public abstract class Vehicle {
   public void setPosition(Position position) {
     this.position = position;
   }
+  
 }

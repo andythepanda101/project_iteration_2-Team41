@@ -62,6 +62,8 @@ public class VisualTransitSimulator {
     this.vehicleStartTimings = new ArrayList<Integer>();
     this.timeSinceLastVehicle = new ArrayList<Integer>();
     this.storageFacility = configManager.getStorageFacility();
+    //this.lineIdsWithIssues = new ArrayList<String>();
+    //this.lineIdsWithIssuesTimer = new ArrayList<Integer>();
     if (this.storageFacility == null) {
       this.storageFacility = new StorageFacility(
           Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
@@ -104,59 +106,61 @@ public class VisualTransitSimulator {
     for (int i = 0; i < timeSinceLastVehicle.size(); i++) {
       if (timeSinceLastVehicle.get(i) <= 0) {
         Line line = lines.get(i);
-        if (line.getType().equals(Line.BUS_LINE)) {
-          // Setting Bus Strategy
-          if (!(busFact.getStrategy() instanceof DayBusStrategy)
-              && (time.getHour() >= 8) && (time.getHour() < 16)) {
-            busFact.setBusStrategy(dayBus);
-            nightBus.resetCount();
-          } else if (!(busFact.getStrategy() instanceof NightBusStrategy)
-              && ((time.getHour() < 8) || (time.getHour() >= 16))) {
-            busFact.setBusStrategy(nightBus);
-            dayBus.resetCount();
+        if (line.getIssuesRemainingSteps() <= 0) {
+          if (line.getType().equals(Line.BUS_LINE)) {
+            // Setting Bus Strategy
+            if (!(busFact.getStrategy() instanceof DayBusStrategy)
+                && (time.getHour() >= 8) && (time.getHour() < 16)) {
+              busFact.setBusStrategy(dayBus);
+              nightBus.resetCount();
+            } else if (!(busFact.getStrategy() instanceof NightBusStrategy)
+                && ((time.getHour() < 8) || (time.getHour() >= 16))) {
+              busFact.setBusStrategy(nightBus);
+              dayBus.resetCount();
+            }
+            Bus newBus = busFact.createVehicle(
+                counter.getBusIdCounterAndIncrement(), line.shallowCopy(), Bus.SPEED);
+            if (newBus instanceof SmallBus && this.storageFacility.getSmallBusesNum() > 0) {
+              activeVehicles.add(newBus);
+              this.storageFacility.decrementSmallBusesNum();
+            } else if (newBus instanceof LargeBus && this.storageFacility.getLargeBusesNum() > 0) {
+              activeVehicles.add(newBus);
+              this.storageFacility.decrementLargeBusesNum();
+            } else {
+              counter.busIdCounter--;
+              busFact.getStrategy().decrementCount();
+            }
+            timeSinceLastVehicle.set(i, vehicleStartTimings.get(i));
+            timeSinceLastVehicle.set(i, timeSinceLastVehicle.get(i) - 1);
+          } else if (line.getType().equals(Line.TRAIN_LINE)) {
+            // Setting Train Strategy
+            if (!(trainFact.getStrategy() instanceof DayBusStrategy)
+                && (time.getHour() >= 8) && (time.getHour() < 16)) {
+              trainFact.setTrainStrategy(dayTrain);
+              nightTrain.resetCount();
+            } else if (!(trainFact.getStrategy() instanceof NightBusStrategy)
+                && ((time.getHour() < 8) || (time.getHour() >= 16))) {
+              trainFact.setTrainStrategy(nightTrain);
+              dayTrain.resetCount();
+            }
+            Train newTrain =
+                trainFact.createVehicle(
+                    counter.getTrainIdCounterAndIncrement(), line.shallowCopy(), Train.SPEED);
+            if (newTrain instanceof ElectricTrain
+                && this.storageFacility.getElectricTrainsNum() > 0) {
+              activeVehicles.add(newTrain);
+              this.storageFacility.decrementElectricTrainsNum();
+            } else if (newTrain instanceof DieselTrain
+                && this.storageFacility.getDieselTrainsNum() > 0) {
+              activeVehicles.add(newTrain);
+              this.storageFacility.decrementDieselTrainsNum();
+            } else {
+              counter.trainIdCounter--;
+              trainFact.getStrategy().decrementCount();
+            }
+            timeSinceLastVehicle.set(i, vehicleStartTimings.get(i));
+            timeSinceLastVehicle.set(i, timeSinceLastVehicle.get(i) - 1);
           }
-          Bus newBus = busFact.createVehicle(
-              counter.getBusIdCounterAndIncrement(), line.shallowCopy(), Bus.SPEED);
-          if (newBus instanceof SmallBus && this.storageFacility.getSmallBusesNum() > 0) {
-            activeVehicles.add(newBus);
-            this.storageFacility.decrementSmallBusesNum();
-          } else if (newBus instanceof LargeBus && this.storageFacility.getLargeBusesNum() > 0) {
-            activeVehicles.add(newBus);
-            this.storageFacility.decrementLargeBusesNum();
-          } else {
-            counter.busIdCounter--;
-            busFact.getStrategy().decrementCount();
-          }
-          timeSinceLastVehicle.set(i, vehicleStartTimings.get(i));
-          timeSinceLastVehicle.set(i, timeSinceLastVehicle.get(i) - 1);
-        } else if (line.getType().equals(Line.TRAIN_LINE)) {
-          // Setting Train Strategy
-          if (!(trainFact.getStrategy() instanceof DayBusStrategy)
-              && (time.getHour() >= 8) && (time.getHour() < 16)) {
-            trainFact.setTrainStrategy(dayTrain);
-            nightTrain.resetCount();
-          } else if (!(trainFact.getStrategy() instanceof NightBusStrategy)
-              && ((time.getHour() < 8) || (time.getHour() >= 16))) {
-            trainFact.setTrainStrategy(nightTrain);
-            dayTrain.resetCount();
-          }
-          Train newTrain =
-              trainFact.createVehicle(
-                  counter.getTrainIdCounterAndIncrement(), line.shallowCopy(), Train.SPEED);
-          if (newTrain instanceof ElectricTrain
-              && this.storageFacility.getElectricTrainsNum() > 0) {
-            activeVehicles.add(newTrain);
-            this.storageFacility.decrementElectricTrainsNum();
-          } else if (newTrain instanceof DieselTrain
-              && this.storageFacility.getDieselTrainsNum() > 0) {
-            activeVehicles.add(newTrain);
-            this.storageFacility.decrementDieselTrainsNum();
-          } else {
-            counter.trainIdCounter--;
-            trainFact.getStrategy().decrementCount();
-          }
-          timeSinceLastVehicle.set(i, vehicleStartTimings.get(i));
-          timeSinceLastVehicle.set(i, timeSinceLastVehicle.get(i) - 1);
         }
       } else {
         timeSinceLastVehicle.set(i, timeSinceLastVehicle.get(i) - 1);
@@ -165,7 +169,22 @@ public class VisualTransitSimulator {
     // update vehicles
     for (int i = activeVehicles.size() - 1; i >= 0; i--) {
       Vehicle currVehicle = activeVehicles.get(i);
-      currVehicle.update();
+      // begin feature 5
+      boolean currVehicleHasIssue = false;
+      for (int index = 0; index < lines.size(); index++) { // loop through each line
+        Line currLineLoop = lines.get(index);
+        // if currVehicle is on the same Line that we're currently
+        // on in the loop, AND that Line has issue
+        if (currVehicle.getLine().getId() == currLineLoop.getId() && currLineLoop.getIssuesRemainingSteps() > 0) {
+          // if vehicle is this line do nothing
+          currVehicleHasIssue = true;
+          break;
+        }
+      }
+      if (!currVehicleHasIssue) {
+        currVehicle.update();
+      }
+      // end feature 5
       if (currVehicle.isTripComplete()) {
         Vehicle completedTripVehicle = activeVehicles.remove(i);
         completedTripVehicles.add(completedTripVehicle);
@@ -194,13 +213,19 @@ public class VisualTransitSimulator {
         currRoute.report(System.out);
       }
     }
+    // decrement issue counter at end of this time step (feature 5)
+    for (int index = 0; index < lines.size(); index++) { // loop through each line
+      Line currLineLoop = lines.get(index);
+      if (currLineLoop.getIssuesRemainingSteps() > 0) {
+        currLineLoop.setIssuesRemainingSteps(currLineLoop.getIssuesRemainingSteps() - 1);
+      }
+    }
   }
 
   public List<Vehicle> getActiveVehicles() {
     return activeVehicles;
   }
 
-  public List<Line> getLines() {
-    return lines;
-  }
+  public List<Line> getLines() { return lines; }
+
 }

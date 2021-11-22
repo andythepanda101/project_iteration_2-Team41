@@ -14,6 +14,7 @@ public class Line {
   private String type;
   private Route outboundRoute;
   private Route inboundRoute;
+  private int issuesRemainingSteps;
 
   /**
    * Constructor for a Line.
@@ -79,4 +80,10 @@ public class Line {
   public Route getInboundRoute() {
     return this.inboundRoute;
   }
+
+  public int getIssuesRemainingSteps() { return this.issuesRemainingSteps; }
+
+  public void setIssuesRemainingSteps(int steps) { this.issuesRemainingSteps = steps; }
+
+
 }
