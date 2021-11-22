@@ -44,6 +44,7 @@ public class WebServerSession {
     webServerState.getCommands().put("update", new UpdateCommand(simulator));
     webServerState.getCommands().put("initLines", new InitLinesCommand(simulator));
     webServerState.getCommands().put("lineIssue", new LineIssueCommand(simulator));
+    webServerState.getCommands().put("registerVehicle", new RegisterVehicleCommand(simulator));
   }
 
 

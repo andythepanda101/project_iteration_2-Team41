@@ -1,22 +1,7 @@
 package edu.umn.cs.csci3081w.project.webserver;
 
-import edu.umn.cs.csci3081w.project.model.Bus;
-import edu.umn.cs.csci3081w.project.model.BusFactory;
-import edu.umn.cs.csci3081w.project.model.Counter;
-import edu.umn.cs.csci3081w.project.model.DayBusStrategy;
-import edu.umn.cs.csci3081w.project.model.DayTrainStrategy;
-import edu.umn.cs.csci3081w.project.model.DieselTrain;
-import edu.umn.cs.csci3081w.project.model.ElectricTrain;
-import edu.umn.cs.csci3081w.project.model.LargeBus;
-import edu.umn.cs.csci3081w.project.model.Line;
-import edu.umn.cs.csci3081w.project.model.NightBusStrategy;
-import edu.umn.cs.csci3081w.project.model.NightTrainStrategy;
-import edu.umn.cs.csci3081w.project.model.Route;
-import edu.umn.cs.csci3081w.project.model.SmallBus;
-import edu.umn.cs.csci3081w.project.model.StorageFacility;
-import edu.umn.cs.csci3081w.project.model.Train;
-import edu.umn.cs.csci3081w.project.model.TrainFactory;
-import edu.umn.cs.csci3081w.project.model.Vehicle;
+import edu.umn.cs.csci3081w.project.model.*;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +29,7 @@ public class VisualTransitSimulator {
   private TrainFactory trainFact = new TrainFactory();
   private DayTrainStrategy dayTrain = new DayTrainStrategy();
   private NightTrainStrategy nightTrain = new NightTrainStrategy();
+  private VehicleSubject vehicleTracker = new VehicleSubject();
 
   /**
    * Constructor for Simulation.
@@ -123,9 +109,11 @@ public class VisualTransitSimulator {
             if (newBus instanceof SmallBus && this.storageFacility.getSmallBusesNum() > 0) {
               activeVehicles.add(newBus);
               this.storageFacility.decrementSmallBusesNum();
+              vehicleTracker.attach(newBus);
             } else if (newBus instanceof LargeBus && this.storageFacility.getLargeBusesNum() > 0) {
               activeVehicles.add(newBus);
               this.storageFacility.decrementLargeBusesNum();
+              vehicleTracker.attach(newBus);
             } else {
               counter.busIdCounter--;
               busFact.getStrategy().decrementCount();
@@ -150,10 +138,12 @@ public class VisualTransitSimulator {
                 && this.storageFacility.getElectricTrainsNum() > 0) {
               activeVehicles.add(newTrain);
               this.storageFacility.decrementElectricTrainsNum();
+              vehicleTracker.attach(newTrain);
             } else if (newTrain instanceof DieselTrain
                 && this.storageFacility.getDieselTrainsNum() > 0) {
               activeVehicles.add(newTrain);
               this.storageFacility.decrementDieselTrainsNum();
+              vehicleTracker.attach(newTrain);
             } else {
               counter.trainIdCounter--;
               trainFact.getStrategy().decrementCount();
@@ -171,6 +161,7 @@ public class VisualTransitSimulator {
     // update vehicles
     for (int i = activeVehicles.size() - 1; i >= 0; i--) {
       Vehicle currVehicle = activeVehicles.get(i);
+      vehicleTracker.notifyObservers();
       // begin feature 5
       boolean currVehicleHasIssue = false;
       for (int index = 0; index < lines.size(); index++) { // loop through each line
@@ -189,7 +180,8 @@ public class VisualTransitSimulator {
       }
       // end feature 5
       if (currVehicle.isTripComplete()) {
-        Vehicle completedTripVehicle = activeVehicles.remove(i);
+        vehicleTracker.detach(currVehicle);
+        Vehicle completedTripVehicle = activeVehicles.remove(i);;
         completedTripVehicles.add(completedTripVehicle);
         if (completedTripVehicle instanceof SmallBus) {
           this.storageFacility.incrementSmallBusesNum();

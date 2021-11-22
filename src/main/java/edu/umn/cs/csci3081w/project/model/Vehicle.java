@@ -3,6 +3,7 @@ package edu.umn.cs.csci3081w.project.model;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -21,6 +22,7 @@ public abstract class Vehicle {
   private Line line;
   private double distanceRemaining;
   private Stop nextStop;
+  private List<Integer> last5C02;
 
 
   /**
@@ -47,9 +49,22 @@ public abstract class Vehicle {
     setName(line.getOutboundRoute().getName() + id);
     setPosition(new Position(nextStop.getPosition().getLongitude(),
         nextStop.getPosition().getLatitude()));
+    this.last5C02 = new ArrayList<Integer>(5);
+    this.last5C02.add(0);
+    this.last5C02.add(0);
+    this.last5C02.add(0);
+    this.last5C02.add(0);
+    this.last5C02.add(0);
   }
 
   public abstract int getCurrentCO2Emission();
+
+  public void updateEmissionsList() {
+    this.getLast5CO2().add(0, getCurrentCO2Emission());
+    this.getLast5CO2().remove(this.getLast5CO2().size() - 1);
+  }
+
+  public List<Integer> getLast5CO2() { return last5C02; }
 
   /**
    * Report statistics for the vehicle.
